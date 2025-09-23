@@ -3,6 +3,7 @@ package com.example.lab_week_05
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.lab_week_05.api.CatApiService
 import com.example.lab_week_05.model.ImageData
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("https://api.thecatapi.com/v1/")
-            .addConverterFactory(MoshiConverterFactory.create()) // Diubah dari ScalarsConverterFactory
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 
@@ -27,6 +28,14 @@ class MainActivity : AppCompatActivity() {
 
     private val apiResponseView: TextView by lazy {
         findViewById(R.id.api_response)
+    }
+
+    private val imageResultView: ImageView by lazy {
+        findViewById(R.id.image_result)
+    }
+
+    private val imageLoader: ImageLoader by lazy {
+        GlideLoader(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +55,12 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<ImageData>>, response: Response<List<ImageData>>) {
                 if (response.isSuccessful) {
                     val image = response.body()
-                    val firstImage = image?.firstOrNull()?.imageUrl ?: "No URL"
+                    val firstImage = image?.firstOrNull()?.imageUrl.orEmpty()
+                    if (firstImage.isNotBlank()) {
+                        imageLoader.loadImage(firstImage, imageResultView)
+                    } else {
+                        Log.d(MAIN_ACTIVITY, "Missing image URL")
+                    }
                     apiResponseView.text = getString(R.string.image_placeholder, firstImage)
                 } else {
                     Log.e(MAIN_ACTIVITY, "Failed to get response\n" +
