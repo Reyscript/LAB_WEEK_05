@@ -11,8 +11,11 @@ APK File: https://drive.google.com/drive/u/5/folders/1MSQtYJ4uCMfXRzZvabCpUgQJOX
 Commit History
 
 Commit No. 1 - Retrofit Setup and Fetch API JSON Response
+
 Commit No. 2 - Parse JSON with Moshi and Display Image URL
+
 Commit No. 3 - Load and Display Cat Image using Glide
+
 Commit No. 4 - Display Cat Breed Information Instead of URL
 
 Fitur Aplikasi
